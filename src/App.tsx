@@ -15,9 +15,9 @@ function App() {
             <Box width={"50%"}>
               <LeftPanel />
             </Box>
-            {/* <Box width={"50%"}>
-          <RightPanel />
-        </Box> */}
+            <Box width={"50%"}>
+              <RightPanel />
+            </Box>
           </Grid2>
         </ThemeProvider>
       </SessionProvider>

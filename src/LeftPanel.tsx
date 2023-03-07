@@ -24,7 +24,6 @@ if (!OIDC_ISSUER) {
 
 function LeftPanel() {
   const { session } = useSession();
-
   const [idpsFromWebIdProfile, setIdpsFromWebIdProfile] = useState<string[]>(
     []
   );
@@ -107,9 +106,25 @@ function LeftPanel() {
     };
     await session.login(config);
   };
+
   const handleLogOut = async () => {
-    console.log("logout!");
+    const discoveryEndpoint = new URL(
+      "/.well-known/openid-configuration",
+      // not-null assertion because error gets thrown above if OIDC_ISSUER is undefined
+      OIDC_ISSUER!
+    );
+    try {
+      const response = await fetch(discoveryEndpoint, {
+        method: "GET",
+        headers: { Accept: "application/json" },
+      });
+      const responseJson = await response.json();
+      window.location = responseJson.end_session_endpoint;
+    } catch (error) {
+      alert(error);
+    }
   };
+
   const handleCreatePod = async () => {
     console.log("create a pod!");
   };
