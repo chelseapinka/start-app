@@ -1,0 +1,4 @@
+@prefix inrupt-apps: <https://inrupt-apps/0.1/> .
+inrupt-apps:String1
+  rdfs:label "Experience Solid"@en ;
+  rdfs:label "Experience Solid in Spanish"@es ;.

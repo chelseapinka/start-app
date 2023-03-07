@@ -1,4 +1,14 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { ReactElement, useEffect, useState } from "react";
 import { useSession } from "@inrupt/solid-ui-react";
@@ -21,6 +31,7 @@ function LeftPanel() {
   const [webId, setWebId] = useState("");
   const [loginWithWebId, setLoginWithWebID] = useState<boolean>(false);
   const [pods, setPods] = useState<string[]>([]);
+  const [language, setLanguage] = useState<string>("en");
   const doesUserHaveWebIdProfile = async (): Promise<boolean> => {
     return window.fetch(webId, { method: "GET" }).then((res) => res.ok);
   };
@@ -44,7 +55,7 @@ function LeftPanel() {
       };
       getPods();
     }
-  }, [session.info]);
+  }, [session]);
 
   const renderIdpOptions = () => {
     if (idpsFromWebIdProfile.length) {
@@ -67,6 +78,23 @@ function LeftPanel() {
       );
   };
 
+  const RadioButtonsGroup = () => {
+    return (
+      <FormControl>
+        <FormLabel id="radio-buttons-language">Language</FormLabel>
+        <RadioGroup
+          aria-labelledby="radio-buttons-language"
+          name="radio-buttons-group"
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+        >
+          <FormControlLabel value="en" control={<Radio />} label="English" />
+          <FormControlLabel value="es" control={<Radio />} label="Español" />
+        </RadioGroup>
+      </FormControl>
+    );
+  };
+
   const handleLogin = async (
     oidcIssuer: string | undefined = process.env.REACT_APP_OIDC_ISSUER,
     redirectUrl: string | undefined = window.location.href
@@ -82,6 +110,9 @@ function LeftPanel() {
   const handleLogOut = async () => {
     console.log("logout!");
   };
+  const handleCreatePod = async () => {
+    console.log("create a pod!");
+  };
 
   const listPods = () => {
     return pods.map((pod) => {
@@ -94,8 +125,9 @@ function LeftPanel() {
       <Grid2 container direction="column" spacing={4}>
         <Grid2>
           <img src="inrupt-logo.png" alt="inrupt logo" />
-          <Typography>Experience Solid</Typography>
-          <Typography>
+          <RadioButtonsGroup />
+          <Typography variant="h1">Experience Solid</Typography>
+          <Typography variant="h3">
             Inrupt PodSpaces allows Solid developers to create and test apps
             against Inrupt's Enterprise Solid Server.
           </Typography>
@@ -111,16 +143,30 @@ function LeftPanel() {
         <Box>
           {session.info.isLoggedIn ? (
             <>
-              <Typography>{`Your WebId is: ${session.info.webId}`}</Typography>
+              <Typography
+                display="inline"
+                variant="h3"
+              >{`Your WebID is: `}</Typography>
+              <Typography display="inline">{`${session.info.webId}`}</Typography>
               {pods.length > 1 ? (
                 <>
-                  <Typography>Your Pods are: </Typography>
+                  <Typography variant="h3">Your Pods are: </Typography>
                   {listPods()}
                 </>
               ) : (
-                <Typography>{`Your Pod is: ${pods[0]}`}</Typography>
+                <>
+                  <Typography
+                    display="inline"
+                    variant="h3"
+                  >{`Your Pod is: `}</Typography>
+                  <Typography display="inline">{`${pods[0]}`}</Typography>
+                </>
               )}
-              <Button onClick={handleLogOut} variant="contained">
+              <Button onClick={handleCreatePod} variant="contained" fullWidth>
+                Add a Pod and save to your Profile
+              </Button>
+              <Box sx={{ height: "5px" }} />
+              <Button onClick={handleLogOut} variant="contained" fullWidth>
                 Logout
               </Button>
             </>
