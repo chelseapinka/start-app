@@ -3,36 +3,22 @@ import { createTheme } from "@mui/material/styles";
 declare module "@mui/material/styles" {
   interface PaletteOptions {
     appBackground: React.CSSProperties["color"];
-    chiclet: React.CSSProperties["color"];
-  }
-}
-
-declare module "@mui/material/Chip" {
-  interface ChipPropsVariantOverrides {
-    bdc: true;
-  }
-}
-
-declare module "@mui/material/Typography" {
-  interface TypographyPropsVariantOverrides {
-    bdcListItemText: true;
   }
 }
 
 export const theme = createTheme({
   palette: {
     appBackground: "#F2F2F2",
-    chiclet: "#FFFFFF",
+
     primary: {
-      main: "#003A63",
+      main: "#0D6796",
     },
     secondary: {
-      main: "#FFC82E",
-      dark: "#2A6EBB",
+      main: "#9671FF",
     },
     text: {
       primary: "#2F2F2F",
-      secondary: "#002A47",
+      secondary: "#073D6C",
     },
     error: {
       main: "#D32F2F",
@@ -46,11 +32,11 @@ export const theme = createTheme({
     h1: {
       fontSize: 34,
       fontWeight: 800,
-      color: "#002A47",
+      color: "#2F2F2F",
       paddingBottom: "8px",
     },
     h2: {
-      color: "#002A47",
+      color: "#2F2F2F",
       fontSize: 24,
       fontWeight: 800,
       lineHeight: 1.375,
@@ -59,7 +45,7 @@ export const theme = createTheme({
     h3: {
       fontWeight: 800,
       fontSize: 20,
-      color: "#275677",
+      color: "#0D6796",
     },
     h4: {
       fontSize: 16,
@@ -74,7 +60,7 @@ export const theme = createTheme({
     },
     body2: {
       fontSize: 16,
-      color: "#2F2F2F",
+      color: "#FFFFFF",
       fontWeight: 800,
     },
     button: {
@@ -89,7 +75,7 @@ export const theme = createTheme({
     subtitle1: {
       fontSize: 14,
       fontWeight: 700,
-      color: "#002A47",
+      color: "#0D6796",
     },
     fontFamily: `'Open Sans', sans-serif`,
   },

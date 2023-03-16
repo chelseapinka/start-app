@@ -1,5 +1,4 @@
 import {
-  Box,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -48,15 +47,15 @@ function LeftPanel() {
   const [pods, setPods] = useState<string[]>([]);
   const [language, setLanguage] = useState<string>("en-us");
   // const [textDataset, setTextDataset] = useState<SolidDataset | undefined>();
-  // const [string1Thing, setString1Thing] = useState<Thing | undefined | null>();
-  // const [string2Thing, setString2Thing] = useState<Thing | undefined | null>();
-  // const [string3Thing, setString3Thing] = useState<Thing | undefined | null>();
-  // const [string4Thing, setString4Thing] = useState<Thing | undefined | null>();
+  const [string1Thing, setString1Thing] = useState<Thing | undefined | null>();
+  const [string2Thing, setString2Thing] = useState<Thing | undefined | null>();
+  const [string3Thing, setString3Thing] = useState<Thing | undefined | null>();
+  const [string4Thing, setString4Thing] = useState<Thing | undefined | null>();
   let textDataset: SolidDataset | undefined;
-  let string1Thing: Thing | undefined | null;
-  let string2Thing: Thing | undefined | null;
-  let string3Thing: Thing | undefined | null;
-  let string4Thing: Thing | undefined | null;
+  // let string1Thing: Thing | undefined | null;
+  // let string2Thing: Thing | undefined | null;
+  // let string3Thing: Thing | undefined | null;
+  // let string4Thing: Thing | undefined | null;
 
   const getTextDatasetAndThing = async () => {
     textDataset = await getSolidDataset(textRdfDocumentUrl, {
@@ -64,13 +63,20 @@ function LeftPanel() {
     });
   };
 
-  getTextDatasetAndThing();
-  if (textDataset) {
-    string1Thing = getThing(textDataset, string1RdfThingUrl);
-    string2Thing = getThing(textDataset, string2RdfThingUrl);
-    string3Thing = getThing(textDataset, string3RdfThingUrl);
-    string4Thing = getThing(textDataset, string4RdfThingUrl);
-  }
+  // getTextDatasetAndThing();
+
+  // if (textDataset) {
+  //   string1Thing = getThing(textDataset, string1RdfThingUrl);
+  //   string2Thing = getThing(textDataset, string2RdfThingUrl);
+  //   string3Thing = getThing(textDataset, string3RdfThingUrl);
+  //   string4Thing = getThing(textDataset, string4RdfThingUrl);
+  //   console.log("IN we have a dataset!", {
+  //     string1Thing,
+  //     string2Thing,
+  //     string3Thing,
+  //     string4Thing,
+  //   });
+  // }
 
   const getPods = async () => {
     if (session.info.webId) {
@@ -81,22 +87,36 @@ function LeftPanel() {
 
   useEffect(() => {
     getPods();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
-  useEffect(() => {
-    if (string1Thing && string2Thing && string3Thing && string4Thing) {
-      getStringWithLocale(string1Thing, appTextPredicate, language);
-      getStringWithLocale(string2Thing, appTextPredicate, language);
-      getStringWithLocale(string3Thing, appTextPredicate, language);
-      getStringWithLocale(string4Thing, appTextPredicate, language);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [language]);
+  // useEffect(() => {
+  //   getTextDatasetAndThing();
+  //   if (textDataset) {
+  //     setString1Thing(getThing(textDataset, string1RdfThingUrl));
+  //     string2Thing = getThing(textDataset, string2RdfThingUrl);
+  //     string3Thing = getThing(textDataset, string3RdfThingUrl);
+  //     string4Thing = getThing(textDataset, string4RdfThingUrl);
+  //     console.log("IN we have a dataset!", {
+  //       string1Thing,
+  //       string2Thing,
+  //       string3Thing,
+  //       string4Thing,
+  //     });
+  //   }
+  //   if (string1Thing && string2Thing && string3Thing && string4Thing) {
+  //     getStringWithLocale(string1Thing, appTextPredicate, language);
+  //     getStringWithLocale(string2Thing, appTextPredicate, language);
+  //     getStringWithLocale(string3Thing, appTextPredicate, language);
+  //     getStringWithLocale(string4Thing, appTextPredicate, language);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [language]);
 
   const RadioButtonsGroup = () => {
     return (
       <FormControl>
-        <FormLabel id="radio-buttons-language">Language</FormLabel>
+        <FormLabel id="radio-buttons-language">Choose your language</FormLabel>
         <RadioGroup
           aria-labelledby="radio-buttons-language"
           name="radio-buttons-group"
@@ -111,41 +131,74 @@ function LeftPanel() {
   };
 
   return (
-    <Box width={"50%"}>
-      <Grid2 container direction="column" spacing={4}>
-        <Grid2>
-          <img src="inrupt-logo.png" alt="inrupt logo" />
-          <RadioButtonsGroup />
-
-          {string1Thing && string2Thing && string3Thing && string4Thing ? (
-            <>
+    // <Box display="flex">
+    <Grid2
+      container
+      direction="column"
+      spacing={4}
+      className="Left panel Grid container"
+    >
+      <Grid2 className="left-panel-always">
+        <Grid2 container>
+          <Grid2 flexGrow="1">
+            <img src="inrupt-logo.png" alt="inrupt logo" />
+          </Grid2>
+          <Grid2>
+            <RadioButtonsGroup />
+          </Grid2>
+        </Grid2>
+        {string1Thing && string2Thing && string3Thing && string4Thing ? (
+          <Grid2 container spacing={4}>
+            <Grid2>
               <Typography variant="h1">
                 {getStringWithLocale(string1Thing, appTextPredicate, language)}
               </Typography>
+            </Grid2>
+            <Grid2>
               <Typography variant="h3">
                 {getStringWithLocale(string2Thing, appTextPredicate, language)}
               </Typography>
+            </Grid2>
+            <Grid2>
               <Typography variant="h3">
                 {getStringWithLocale(string3Thing, appTextPredicate, language)}
               </Typography>
+            </Grid2>
+            <Grid2>
               <Typography variant="h3">
                 {getStringWithLocale(string4Thing, appTextPredicate, language)}
               </Typography>
-            </>
-          ) : (
-            <>
+            </Grid2>
+          </Grid2>
+        ) : (
+          <Grid2 container spacing={4}>
+            <Grid2>
               <Typography variant="h1">{defaultStrings.string1}</Typography>
+            </Grid2>
+            <Grid2>
               <Typography variant="h3">{defaultStrings.string2}</Typography>
+            </Grid2>
+            <Grid2>
               <Typography variant="h3">{defaultStrings.string3}</Typography>
+            </Grid2>
+            <Grid2>
               <Typography variant="h3">{defaultStrings.string4}</Typography>
-            </>
-          )}
-        </Grid2>
-        <Box>
-          {session.info.isLoggedIn ? <LoggedInView /> : <LoggedOutView />}
-        </Box>
+            </Grid2>
+          </Grid2>
+        )}
       </Grid2>
-    </Box>
+      <Grid2 container>
+        {session.info.isLoggedIn ? (
+          <Grid2>
+            <LoggedInView />
+          </Grid2>
+        ) : (
+          <Grid2>
+            <LoggedOutView />
+          </Grid2>
+        )}
+      </Grid2>
+    </Grid2>
   );
 }
 

@@ -80,24 +80,33 @@ function LoggedOutView() {
 
   return (
     <Grid2 container direction="column" spacing={4}>
-      <Typography>Have a WebID? </Typography>
-      <Button
-        onClick={() => handleLogin("https://login.inrupt.com")}
-        variant="contained"
-      >
-        Sign In with PodSpaces
-      </Button>
-      <Typography>Or enter your WebID to Sign into another server</Typography>
-      <TextField
-        variant="standard"
-        onChange={(e) => setWebId(e.target.value)}
-        value={webId}
-      />
-
-      <Button onClick={getIdpsFromWebId} variant="contained">
-        Get IDP from WebID Profile
-      </Button>
-      {renderIdpOptions()}
+      <Grid2>
+        <Button
+          onClick={() => handleLogin("https://login.inrupt.com")}
+          variant="contained"
+        >
+          Create new WebId with PodSpaces
+        </Button>
+      </Grid2>
+      <Grid2>
+        <Button
+          onClick={() => handleLogin("https://login.inrupt.com")}
+          variant="contained"
+        >
+          Sign In with PodSpaces
+        </Button>
+      </Grid2>
+      <Grid2>
+        <TextField
+          variant="standard"
+          onChange={(e) => setWebId(e.target.value)}
+          value={webId}
+        />
+        <Button onClick={getIdpsFromWebId} variant="contained">
+          Sign in with another IDP
+        </Button>
+        {renderIdpOptions()}
+      </Grid2>
     </Grid2>
   );
 }

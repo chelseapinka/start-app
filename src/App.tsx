@@ -11,14 +11,21 @@ function App() {
     <div className="App">
       <SessionProvider>
         <ThemeProvider theme={theme}>
-          <Grid2 container>
-            <Box width={"50%"}>
-              <LeftPanel />
-            </Box>
-            <Box width={"50%"}>
-              <RightPanel />
-            </Box>
-          </Grid2>
+          <Box display="flex" className="App box">
+            <Grid2
+              container
+              flexDirection="row"
+              className="App Grid container"
+              flexWrap="nowrap"
+            >
+              <Grid2 m="25px">
+                <LeftPanel />
+              </Grid2>
+              <Grid2>
+                <RightPanel />
+              </Grid2>
+            </Grid2>
+          </Box>
         </ThemeProvider>
       </SessionProvider>
     </div>
