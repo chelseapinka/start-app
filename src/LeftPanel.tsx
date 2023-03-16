@@ -9,7 +9,6 @@ import {
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { useEffect, useState } from "react";
 import { useSession } from "@inrupt/solid-ui-react";
-
 import {
   getPodUrlAll,
   getStringWithLocale,
@@ -19,7 +18,6 @@ import {
   SolidDataset,
 } from "@inrupt/solid-client";
 import defaultStrings from "./defaultStrings.json";
-// import strings from "./stringsDataset.ttl";
 import LoggedInView from "./LoggedInView";
 import LoggedOutView from "./LoggedOutView";
 
@@ -46,37 +44,22 @@ function LeftPanel() {
   const { session } = useSession();
   const [pods, setPods] = useState<string[]>([]);
   const [language, setLanguage] = useState<string>("en-us");
-  // const [textDataset, setTextDataset] = useState<SolidDataset | undefined>();
+  const [textDataset, setTextDataset] = useState<SolidDataset | undefined>();
   const [string1Thing, setString1Thing] = useState<Thing | undefined | null>();
   const [string2Thing, setString2Thing] = useState<Thing | undefined | null>();
   const [string3Thing, setString3Thing] = useState<Thing | undefined | null>();
   const [string4Thing, setString4Thing] = useState<Thing | undefined | null>();
-  let textDataset: SolidDataset | undefined;
-  // let string1Thing: Thing | undefined | null;
-  // let string2Thing: Thing | undefined | null;
-  // let string3Thing: Thing | undefined | null;
-  // let string4Thing: Thing | undefined | null;
+  const [string1Text, setString1Text] = useState<string | null>("");
+  const [string2Text, setString2Text] = useState<string | null>("");
+  const [string3Text, setString3Text] = useState<string | null>("");
+  const [string4Text, setString4Text] = useState<string | null>("");
 
   const getTextDatasetAndThing = async () => {
-    textDataset = await getSolidDataset(textRdfDocumentUrl, {
+    const text = await getSolidDataset(textRdfDocumentUrl, {
       fetch: session.fetch,
     });
+    setTextDataset(text);
   };
-
-  // getTextDatasetAndThing();
-
-  // if (textDataset) {
-  //   string1Thing = getThing(textDataset, string1RdfThingUrl);
-  //   string2Thing = getThing(textDataset, string2RdfThingUrl);
-  //   string3Thing = getThing(textDataset, string3RdfThingUrl);
-  //   string4Thing = getThing(textDataset, string4RdfThingUrl);
-  //   console.log("IN we have a dataset!", {
-  //     string1Thing,
-  //     string2Thing,
-  //     string3Thing,
-  //     string4Thing,
-  //   });
-  // }
 
   const getPods = async () => {
     if (session.info.webId) {
@@ -90,28 +73,39 @@ function LeftPanel() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
-  // useEffect(() => {
-  //   getTextDatasetAndThing();
-  //   if (textDataset) {
-  //     setString1Thing(getThing(textDataset, string1RdfThingUrl));
-  //     string2Thing = getThing(textDataset, string2RdfThingUrl);
-  //     string3Thing = getThing(textDataset, string3RdfThingUrl);
-  //     string4Thing = getThing(textDataset, string4RdfThingUrl);
-  //     console.log("IN we have a dataset!", {
-  //       string1Thing,
-  //       string2Thing,
-  //       string3Thing,
-  //       string4Thing,
-  //     });
-  //   }
-  //   if (string1Thing && string2Thing && string3Thing && string4Thing) {
-  //     getStringWithLocale(string1Thing, appTextPredicate, language);
-  //     getStringWithLocale(string2Thing, appTextPredicate, language);
-  //     getStringWithLocale(string3Thing, appTextPredicate, language);
-  //     getStringWithLocale(string4Thing, appTextPredicate, language);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [language]);
+  useEffect(() => {
+    getTextDatasetAndThing();
+  }, []);
+
+  useEffect(() => {
+    if (textDataset) {
+      setString1Thing(getThing(textDataset, string1RdfThingUrl));
+      setString2Thing(getThing(textDataset, string2RdfThingUrl));
+      setString3Thing(getThing(textDataset, string3RdfThingUrl));
+      setString4Thing(getThing(textDataset, string4RdfThingUrl));
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [textDataset]);
+
+  useEffect(() => {
+    if (string1Thing && string2Thing && string3Thing && string4Thing) {
+      setString1Text(
+        getStringWithLocale(string1Thing, appTextPredicate, language)
+      );
+      setString2Text(
+        getStringWithLocale(string2Thing, appTextPredicate, language)
+      );
+      setString3Text(
+        getStringWithLocale(string3Thing, appTextPredicate, language)
+      );
+      setString4Text(
+        getStringWithLocale(string4Thing, appTextPredicate, language)
+      );
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [string1Thing, string2Thing, string3Thing, string4Thing, language]);
 
   const RadioButtonsGroup = () => {
     return (
@@ -147,27 +141,19 @@ function LeftPanel() {
             <RadioButtonsGroup />
           </Grid2>
         </Grid2>
-        {string1Thing && string2Thing && string3Thing && string4Thing ? (
+        {string1Text && string2Text && string3Text && string4Text ? (
           <Grid2 container spacing={4}>
             <Grid2>
-              <Typography variant="h1">
-                {getStringWithLocale(string1Thing, appTextPredicate, language)}
-              </Typography>
+              <Typography variant="h1">{string1Text}</Typography>
             </Grid2>
             <Grid2>
-              <Typography variant="h3">
-                {getStringWithLocale(string2Thing, appTextPredicate, language)}
-              </Typography>
+              <Typography variant="h3">{string2Text}</Typography>
             </Grid2>
             <Grid2>
-              <Typography variant="h3">
-                {getStringWithLocale(string3Thing, appTextPredicate, language)}
-              </Typography>
+              <Typography variant="h3">{string3Text}</Typography>
             </Grid2>
             <Grid2>
-              <Typography variant="h3">
-                {getStringWithLocale(string4Thing, appTextPredicate, language)}
-              </Typography>
+              <Typography variant="h3">{string4Text}</Typography>
             </Grid2>
           </Grid2>
         ) : (
